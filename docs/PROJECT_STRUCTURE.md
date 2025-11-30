@@ -25,4 +25,4 @@ Arborescence synthétique des principaux dossiers et fichiers fournis pour lance
 └── .github/workflows/ci.yml # Pipeline CI (build/lint backend et frontend)
 ```
 
-Pour les détails de conception et les étapes d'exécution, consulter `docs/architecture.md` et `docs/DEVELOPMENT.md`.
+Pour les détails de conception, consulter `docs/architecture.md`; pour l'exécution locale et multi-OS, voir `docs/DEVELOPMENT.md` et `docs/INSTALLATION.md`.
