@@ -1,0 +1,99 @@
+version: "3.9"
+
+# Stack de base pour TraceGuard : API, base de données, stockage objet, reverse proxy sécurisé.
+services:
+  api:
+    build:
+      context: ../backend
+      dockerfile: ../infra/dockerfiles/Dockerfile.api
+    env_file:
+      - ../backend/.env.example
+    depends_on:
+      - db
+      - minio
+    networks:
+      - private
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.traceguard.local`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.services.api.loadbalancer.server.port=3000"
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: traceguard
+      POSTGRES_PASSWORD: traceguard
+      POSTGRES_DB: traceguard
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - private
+
+  minio:
+    image: quay.io/minio/minio:RELEASE.2024-06-13T22-53-53Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-traceguard}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-traceguardsecret}
+      # Compatibilité avec l'ancienne nomenclature si vous utilisez déjà ces variables.
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-traceguard}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-traceguardsecret}
+    volumes:
+      - minio_data:/data
+    networks:
+      - private
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  minio-init:
+    image: quay.io/minio/mc:RELEASE.2024-06-13T22-48-27Z
+    depends_on:
+      - minio
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      set -e
+      until mc alias set traceguard http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"; do
+        echo "Attente de MinIO..." && sleep 2;
+      done
+      mc mb --ignore-existing traceguard/traceguard-media
+      mc anonymous set none traceguard/traceguard-media
+      echo "Bucket traceguard-media prêt"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-traceguard}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-traceguardsecret}
+    networks:
+      - private
+
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.dev.acme.tlschallenge=true"
+      - "--certificatesresolvers.dev.acme.email=ops@traceguard.local"
+      - "--certificatesresolvers.dev.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+      - traefik_certs:/letsencrypt
+    networks:
+      - proxy
+      - private
+
+volumes:
+  db_data:
+  minio_data:
+  traefik_certs:
+
+networks:
+  proxy:
+  private:
