@@ -1,0 +1,36 @@
+# Règles dynamiques : headers de sécurité stricts et routage de base
+http:
+  middlewares:
+    security-headers:
+      headers:
+        stsSeconds: 63072000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        referrerPolicy: "no-referrer"
+        contentTypeNosniff: true
+        browserXssFilter: true
+        customResponseHeaders:
+          permissions-policy: "geolocation=(self), camera=(), microphone=()"
+          x-frame-options: "DENY"
+          x-content-type-options: "nosniff"
+          x-permitted-cross-domain-policies: "none"
+    ratelimit-api:
+      rateLimit:
+        average: 100
+        burst: 50
+  routers:
+    api:
+      rule: "Host(`api.traceguard.local`)"
+      service: api
+      entryPoints:
+        - websecure
+      middlewares:
+        - security-headers
+        - ratelimit-api
+      tls:
+        certResolver: dev
+  services:
+    api:
+      loadBalancer:
+        servers:
+          - url: "http://api:3000"

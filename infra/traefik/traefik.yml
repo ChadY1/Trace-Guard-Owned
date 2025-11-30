@@ -1,0 +1,12 @@
+# Configuration statique Traefik pour le reverse proxy/"serveur fantôme"
+api:
+  dashboard: true
+log:
+  level: INFO
+accessLog: {}
+certificatesResolvers:
+  dev:
+    acme:
+      email: ops@traceguard.local
+      storage: /letsencrypt/acme.json
+      tlsChallenge: {}

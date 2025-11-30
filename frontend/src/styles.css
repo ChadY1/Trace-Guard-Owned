@@ -1,0 +1,58 @@
+:root {
+  color-scheme: light dark;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #0c1117;
+  color: #e5e7eb;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.layout {
+  display: grid;
+  gap: 1rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.panel {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.banner {
+  background: linear-gradient(120deg, #0ea5e9, #6366f1);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  color: #0b1220;
+}
+
+.banner ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.card small {
+  display: block;
+  color: #9ca3af;
+}
