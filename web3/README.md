@@ -3,7 +3,7 @@
 Contrats et intégrations pour l'ancrage immuable des empreintes de médias et l'audit décentralisé.
 
 ## Contenu
-- `contracts/TraceGuardRegistry.sol` : registre d'empreintes (hash) avec ancrage horodaté et URI de métadonnées hors-chaîne (stockage chiffré ou IPFS privé).
+- `contracts/TraceGuardRegistry.sol` : registre d'empreintes (hash) avec ancrage horodaté, contrôle d'accès simple (owner + liste blanche) et URI de métadonnées hors-chaîne (stockage chiffré ou IPFS privé).
 
 ## Principes de sécurité
 - Contrat minimaliste pour limiter la surface d'attaque ; à enrichir avec une gouvernance (multisig) avant production.

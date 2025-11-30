@@ -5,6 +5,7 @@ import sensible from '@fastify/sensible';
 import rateLimit from '@fastify/rate-limit';
 import { FastifyInstance } from 'fastify';
 import { config } from '../config/config';
+import cors from '@fastify/cors';
 
 export default fp(async function security(fastify: FastifyInstance) {
   await fastify.register(sensible);
@@ -24,6 +25,11 @@ export default fp(async function security(fastify: FastifyInstance) {
     max: 200,
     timeWindow: '1 minute',
     allowList: [],
+  });
+
+  await fastify.register(cors, {
+    origin: config.allowOrigins.length ? config.allowOrigins : true,
+    credentials: true,
   });
 
   fastify.addHook('onRequest', async (request, reply) => {

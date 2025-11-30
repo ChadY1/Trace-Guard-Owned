@@ -20,6 +20,7 @@ npm install
 npm run dev
 ```
 - JWT statique pour tests: généré via `/auth/login` (remplacer par OIDC en production)
+- Tests unitaires rapides: `npm test`
 
 ## Front-end (Vite + React)
 ```bash
@@ -28,6 +29,10 @@ npm install
 npm run dev
 ```
 - Configurez `ALLOW_ORIGINS` côté backend pour autoriser `http://localhost:5173`
+
+## Déploiement Kubernetes (aperçu)
+- Manifests d'exemple sous `infra/k8s/` (Ingress Traefik, StatefulSet Postgres, Deployment API).
+- Créez les secrets requis (JWT, Postgres, MinIO) avant d'appliquer.
 
 ## Sécurité & conformité
 - Secrets dans un vault (non commités) ; `.env.example` documente les variables attendues.

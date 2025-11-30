@@ -1,16 +1,20 @@
 // Service d'authentification basique (ébauche) pour TraceGuard.
 import { FastifyInstance } from 'fastify';
+import argon2 from 'argon2';
 import { loginSchema, LoginInput } from './auth.schema';
+import { findUser, seedDefaultAdmin } from './user.store';
 
 export class AuthService {
   constructor(private app: FastifyInstance) {}
 
   async login(payload: LoginInput) {
-    // TODO: remplacer par une vraie vérification (OIDC/IdP, WebAuthn, MFA).
-    if (payload.username === 'admin' && payload.password === 'password123') {
-      const token = this.app.jwt.sign({ sub: payload.username, roles: ['admin'] }, { expiresIn: '1h' });
-      return { accessToken: token, expiresIn: 3600 };
-    }
-    return this.app.httpErrors.unauthorized('invalid credentials');
+    await seedDefaultAdmin();
+    const parsed = loginSchema.parse(payload);
+    const user = findUser(parsed.username);
+    if (!user) return this.app.httpErrors.unauthorized('invalid credentials');
+    const isValid = await argon2.verify(user.passwordHash, parsed.password);
+    if (!isValid) return this.app.httpErrors.unauthorized('invalid credentials');
+    const token = this.app.jwt.sign({ sub: parsed.username, roles: user.roles }, { expiresIn: '1h' });
+    return { accessToken: token, expiresIn: 3600 };
   }
 }

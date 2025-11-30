@@ -5,6 +5,7 @@ Cadre initial pour documenter et concevoir TraceGuard (traceguard.globaleurope.f
 ## Contenu
 - **docs/architecture.md** : plan d’architecture complet (environnements, API, gouvernance des médias, sécurité, conformité, roadmap).
 - **docs/DEVELOPMENT.md** : démarrage rapide des environnements locaux (Docker Compose, backend Fastify, frontend Vite).
+- **docs/PROJECT_STRUCTURE.md** : arborescence synthétique et rôle des dossiers.
 - **infra/** : compose Traefik + API + Postgres + MinIO avec headers de sécurité et rate limiting.
 - **backend/** : API Fastify (auth, upload média, audit, policies), JWT protégé, Swagger.
 - **frontend/** : Vite + React, premiers écrans de console sécurisée.

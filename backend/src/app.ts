@@ -1,5 +1,5 @@
 // App Fastify : routes principales et documentation Swagger.
-import Fastify from 'fastify';
+import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import multipart from '@fastify/multipart';
@@ -11,8 +11,8 @@ import { registerMediaRoutes } from './modules/media/media.controller';
 import { registerAuditRoutes } from './modules/audit/audit.controller';
 import { registerAccessRoutes } from './modules/access/access.controller';
 
-export async function buildApp() {
-  const app = Fastify({ logger: true });
+export async function buildApp(): Promise<FastifyInstance> {
+  const app = fastify({ logger: true });
 
   await app.register(swagger, {
     openapi: {
@@ -30,7 +30,7 @@ export async function buildApp() {
   await app.register(jwt, { secret: config.jwtSecret });
   await app.register(securityPlugin);
 
-  app.decorate('authenticate', async (request: any, reply: any) => {
+  app.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       await request.jwtVerify();
     } catch (err) {
