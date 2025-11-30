@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: traceguard-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: traceguard-hsts@kubernetescrd
+spec:
+  rules:
+    - host: api.traceguard.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: traceguard-api
+                port:
+                  number: 80
+  tls:
+    - secretName: traceguard-tls
+      hosts:
+        - api.traceguard.local
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traceguard-hsts
+spec:
+  headers:
+    stsSeconds: 31536000
+    stsIncludeSubdomains: true
+    stsPreload: true
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
