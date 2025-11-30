@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traceguard-api
+  labels:
+    app: traceguard-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: traceguard-api
+  template:
+    metadata:
+      labels:
+        app: traceguard-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/traceguard/api:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: "3000"
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: traceguard-secrets
+                  key: jwt_secret
+            - name: POSTGRES_URL
+              valueFrom:
+                secretKeyRef:
+                  name: traceguard-secrets
+                  key: postgres_url
+            - name: MINIO_ENDPOINT
+              value: "http://minio.traceguard.svc.cluster.local:9000"
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: traceguard-secrets
+                  key: minio_access_key
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: traceguard-secrets
+                  key: minio_secret_key
+            - name: MINIO_BUCKET
+              value: "traceguard-media"
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traceguard-api
+spec:
+  selector:
+    app: traceguard-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
