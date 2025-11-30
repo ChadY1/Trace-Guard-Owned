@@ -1,0 +1,12 @@
+[
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "mediaHash", "type": "bytes32" },
+      { "internalType": "string", "name": "metadataUri", "type": "string" }
+    ],
+    "name": "anchor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
