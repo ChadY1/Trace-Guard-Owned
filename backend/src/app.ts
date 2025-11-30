@@ -1,18 +1,31 @@
 // App Fastify : routes principales et documentation Swagger.
+import { IncomingMessage, Server, ServerResponse } from 'http';
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
+import compress from '@fastify/compress';
 import securityPlugin from './plugins/security';
 import { config } from './config/config';
 import { registerAuthRoutes } from './modules/auth/auth.controller';
 import { registerMediaRoutes } from './modules/media/media.controller';
 import { registerAuditRoutes } from './modules/audit/audit.controller';
 import { registerAccessRoutes } from './modules/access/access.controller';
+import { registerIntelRoutes } from './modules/intel/intel.controller';
 
 export async function buildApp(): Promise<FastifyInstance> {
-  const app = fastify({ logger: true });
+  const loggerOptions = {
+    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+    transport: process.env.NODE_ENV === 'production'
+      ? undefined
+      : { target: 'pino-pretty', options: { colorize: true, translateTime: true } },
+  } as const;
+
+  const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify({
+    logger: loggerOptions,
+    trustProxy: true,
+  });
 
   await app.register(swagger, {
     openapi: {
@@ -27,6 +40,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(swaggerUi, { routePrefix: '/docs', uiConfig: { docExpansion: 'list' } });
 
   await app.register(multipart);
+  await app.register(compress, { global: true, encodings: ['gzip', 'deflate', 'br'] });
   await app.register(jwt, { secret: config.jwtSecret });
   await app.register(securityPlugin);
 
@@ -42,6 +56,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await registerMediaRoutes(app);
   await registerAuditRoutes(app);
   await registerAccessRoutes(app);
+  await registerIntelRoutes(app);
 
   app.get('/health', async () => ({ status: 'ok' }));
 

@@ -38,3 +38,5 @@ npm run dev
 - Secrets dans un vault (non commités) ; `.env.example` documente les variables attendues.
 - Reverse proxy Traefik applique headers, TLS et rate limiting ; à compléter avec WAF et mTLS interne.
 - Les journaux d'audit doivent être expédiés vers un SIEM et ancrés optionnellement sur la chaîne (module Web3).
+- Variables de performance : `POSTGRES_POOL_SIZE/POSTGRES_IDLE_TIMEOUT_MS/POSTGRES_CONNECTION_TIMEOUT_MS` pilotent le pooling, et
+  `RESPONSE_CACHE_TTL_SECONDS/RESPONSE_CACHE_MAX` contrôlent le cache mémoire partagé utilisé pour les lectures répétées.

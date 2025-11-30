@@ -9,7 +9,7 @@ Arborescence synthétique des principaux dossiers et fichiers fournis pour lance
 │   │   ├── app.ts           # Construction de l'app Fastify (plugins, Swagger, routes)
 │   │   ├── index.ts         # Entrée principale + migration de schéma Postgres
 │   │   ├── db/              # Client Postgres + migration minimale
-│   │   ├── modules/         # Auth, médias, audit, accès
+│   │   ├── modules/         # Auth, médias, audit, accès, renseignement (IMINT/OSINT/GEO)
 │   │   ├── services/        # Stockage objet (MinIO), Web3 registry
 │   │   ├── utils/           # Fonctions utilitaires (checksum)
 │   │   └── app.test.ts      # Tests Jest de fumée (health, auth)
