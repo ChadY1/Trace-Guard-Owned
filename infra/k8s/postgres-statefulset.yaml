@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: traceguard-postgres
+spec:
+  selector:
+    matchLabels:
+      app: traceguard-postgres
+  serviceName: "traceguard-postgres"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: traceguard-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: traceguard
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: traceguard-secrets
+                  key: postgres_password
+            - name: POSTGRES_DB
+              value: traceguard
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traceguard-postgres
+spec:
+  selector:
+    app: traceguard-postgres
+  ports:
+    - port: 5432
+      name: postgres
