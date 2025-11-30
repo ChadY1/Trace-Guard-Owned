@@ -73,4 +73,19 @@ export class MediaService {
     }
     return record;
   }
+
+  async listRecent(limit = 20): Promise<MediaRecord[]> {
+    const cappedLimit = Math.min(Math.max(limit, 1), 100);
+    const cacheKey = `media:list:${cappedLimit}`;
+    const cache = await this.cachePromise;
+    const cached = await cache.get<MediaRecord[]>(cacheKey);
+    if (cached) return cached;
+
+    const { rows } = await pool.query(
+      'SELECT id, filename, size, mime_type AS "mimeType", checksum, storage_uri AS "storageUri", created_at AS "createdAt" FROM media_records ORDER BY created_at DESC LIMIT $1',
+      [cappedLimit]
+    );
+    await cache.set(cacheKey, rows, config.responseCacheTtlSeconds);
+    return rows;
+  }
 }
