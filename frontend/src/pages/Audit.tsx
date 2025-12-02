@@ -5,6 +5,7 @@ import { AuditTable } from '../components/AuditTable';
 export const AuditPage: React.FC = () => {
   return (
     <main className="layout">
+    <div className="page-grid">
       <SecureBanner />
       <section className="panel">
         <h1>Journal d'audit</h1>
@@ -12,5 +13,6 @@ export const AuditPage: React.FC = () => {
         <AuditTable />
       </section>
     </main>
+    </div>
   );
 };

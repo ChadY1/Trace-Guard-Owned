@@ -12,6 +12,7 @@ import { registerAuthRoutes } from './modules/auth/auth.controller';
 import { registerMediaRoutes } from './modules/media/media.controller';
 import { registerAuditRoutes } from './modules/audit/audit.controller';
 import { registerAccessRoutes } from './modules/access/access.controller';
+import { registerIntelRoutes } from './modules/intel/intel.controller';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const loggerOptions = {
@@ -55,6 +56,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await registerMediaRoutes(app);
   await registerAuditRoutes(app);
   await registerAccessRoutes(app);
+  await registerIntelRoutes(app);
 
   app.get('/health', async () => ({ status: 'ok' }));
 

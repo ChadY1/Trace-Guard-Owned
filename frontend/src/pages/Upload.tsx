@@ -7,6 +7,7 @@ export const Upload: React.FC = () => {
 
   return (
     <main className="layout">
+    <div className="page-grid">
       <SecureBanner />
       <section className="panel">
         <h1>Upload sécurisé</h1>
@@ -15,5 +16,6 @@ export const Upload: React.FC = () => {
         {status && <p className="status">{status}</p>}
       </section>
     </main>
+    </div>
   );
 };

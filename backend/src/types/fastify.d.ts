@@ -17,4 +17,8 @@ declare module 'fastify' {
   interface FastifyRequest {
     user: { sub: string; roles: string[] };
   }
+
+  interface FastifyRequest {
+    user: { sub: string; roles: string[] };
+  }
 }

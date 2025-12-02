@@ -40,6 +40,15 @@ export async function registerMediaRoutes(app: FastifyInstance) {
     return { id: record.id, filename: record.filename, size: record.size, checksum: record.checksum };
   });
 
+  app.get('/media', {
+    preValidation: [app.authenticate],
+    schema: { summary: 'Liste les médias récents', security: [{ bearerAuth: [] }] },
+  }, async (request) => {
+    const { limit = 20 } = request.query as { limit?: number };
+    const records = await service.listRecent(Number(limit));
+    return { items: records, total: records.length };
+  });
+
   app.get('/media/:id', {
     preValidation: [app.authenticate],
     schema: { summary: 'Récupère les métadonnées d’un média', security: [{ bearerAuth: [] }] },

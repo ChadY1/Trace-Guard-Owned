@@ -26,6 +26,7 @@ export async function ensureBucketExists(bucket: string) {
 
 export async function putObject(bucket: string, key: string, data: Buffer, mimeType: string): Promise<StoredObject> {
   await ensureBucketExists(bucket);
+  await objectClient.putObject(bucket, key, data, { 'Content-Type': mimeType });
   await objectClient.putObject(bucket, key, data, data.length, { 'Content-Type': mimeType });
   return {
     key,

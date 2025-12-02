@@ -28,7 +28,27 @@ cd frontend
 npm install
 npm run dev
 ```
+- Créez un fichier `.env.local` (ou copiez `.env.example`) avec `VITE_API_BASE_URL=http://localhost:3000` pour pointer vers le backend.
 - Configurez `ALLOW_ORIGINS` côté backend pour autoriser `http://localhost:5173`
+- Ouvrez `http://localhost:5173` (ou `http://localhost:4173` si Vite choisit ce port)
+
+## MinIO (stockage objet S3-like)
+1. Démarrez MinIO et l'initialisation du bucket :
+   ```bash
+   cd infra
+   docker compose up -d minio minio-init
+   ```
+2. Console d'admin : http://localhost:9001 (identifiants par défaut `traceguard` / `traceguardsecret`).
+3. Vérifiez le bucket auto-créé : `traceguard-media` (visible dans la console ou via `docker compose logs minio-init`).
+4. Le backend lit ses secrets dans `.env` :
+   - `MINIO_ENDPOINT=http://minio:9000` (ou `http://localhost:9000` si lancé hors compose)
+   - `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY`
+   - `MINIO_BUCKET=traceguard-media`
+5. Exemple d'upload côté backend : route `POST /media/upload` (multipart) avec un JWT obtenu via `POST /auth/login`.
+
+## Déploiement Kubernetes (aperçu)
+- Manifests d'exemple sous `infra/k8s/` (Ingress Traefik, StatefulSet Postgres, Deployment API).
+- Créez les secrets requis (JWT, Postgres, MinIO) avant d'appliquer.
 
 ## Déploiement Kubernetes (aperçu)
 - Manifests d'exemple sous `infra/k8s/` (Ingress Traefik, StatefulSet Postgres, Deployment API).

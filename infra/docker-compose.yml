@@ -36,8 +36,11 @@ services:
     image: quay.io/minio/minio:RELEASE.2024-06-13T22-53-53Z
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ACCESS_KEY: traceguard
-      MINIO_SECRET_KEY: traceguardsecret
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-traceguard}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-traceguardsecret}
+      # Compatibilité avec l'ancienne nomenclature si vous utilisez déjà ces variables.
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-traceguard}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-traceguardsecret}
     volumes:
       - minio_data:/data
     networks:
@@ -45,6 +48,25 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+
+  minio-init:
+    image: quay.io/minio/mc:RELEASE.2024-06-13T22-48-27Z
+    depends_on:
+      - minio
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      set -e
+      until mc alias set traceguard http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"; do
+        echo "Attente de MinIO..." && sleep 2;
+      done
+      mc mb --ignore-existing traceguard/traceguard-media
+      mc anonymous set none traceguard/traceguard-media
+      echo "Bucket traceguard-media prêt"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-traceguard}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-traceguardsecret}
+    networks:
+      - private
 
   traefik:
     image: traefik:v3.0
