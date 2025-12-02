@@ -17,7 +17,7 @@ export async function registerMediaRoutes(app: FastifyInstance) {
       consumes: ['multipart/form-data'],
       security: [{ bearerAuth: [] }],
     },
-  }, async (request: any, reply) => {
+  }, async (request, reply) => {
     const data = await request.file();
     if (!data) return reply.badRequest('file missing');
     const buffer = await data.toBuffer();
@@ -38,6 +38,15 @@ export async function registerMediaRoutes(app: FastifyInstance) {
         .catch((err) => app.log.warn({ err }, 'web3 anchor skipped'));
     }
     return { id: record.id, filename: record.filename, size: record.size, checksum: record.checksum };
+  });
+
+  app.get('/media', {
+    preValidation: [app.authenticate],
+    schema: { summary: 'Liste les médias récents', security: [{ bearerAuth: [] }] },
+  }, async (request) => {
+    const { limit = 20 } = request.query as { limit?: number };
+    const records = await service.listRecent(Number(limit));
+    return { items: records, total: records.length };
   });
 
   app.get('/media/:id', {

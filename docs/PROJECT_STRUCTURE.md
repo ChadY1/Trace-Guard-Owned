@@ -10,6 +10,7 @@ Arborescence synthétique des principaux dossiers et fichiers fournis pour lance
 │   │   ├── index.ts         # Entrée principale + migration de schéma Postgres
 │   │   ├── db/              # Client Postgres + migration minimale
 │   │   ├── modules/         # Auth, médias, audit, accès
+│   │   ├── modules/         # Auth, médias, audit, accès, renseignement (IMINT/OSINT/GEO)
 │   │   ├── services/        # Stockage objet (MinIO), Web3 registry
 │   │   ├── utils/           # Fonctions utilitaires (checksum)
 │   │   └── app.test.ts      # Tests Jest de fumée (health, auth)
@@ -26,3 +27,4 @@ Arborescence synthétique des principaux dossiers et fichiers fournis pour lance
 ```
 
 Pour les détails de conception et les étapes d'exécution, consulter `docs/architecture.md` et `docs/DEVELOPMENT.md`.
+Pour les détails de conception, consulter `docs/architecture.md`; pour l'exécution locale et multi-OS, voir `docs/DEVELOPMENT.md` et `docs/INSTALLATION.md`.

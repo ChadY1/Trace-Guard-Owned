@@ -4,6 +4,12 @@ import { Pool } from 'pg';
 import { config } from '../config/config';
 
 export const pool = new Pool({ connectionString: config.postgresUrl });
+export const pool = new Pool({
+  connectionString: config.postgresUrl,
+  max: config.postgresPoolSize,
+  idleTimeoutMillis: config.postgresIdleTimeoutMs,
+  connectionTimeoutMillis: config.postgresConnectionTimeoutMs,
+});
 
 export async function migrateBaseSchema() {
   await pool.query(`

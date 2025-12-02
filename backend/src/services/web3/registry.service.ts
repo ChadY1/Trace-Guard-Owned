@@ -11,6 +11,7 @@ export interface AnchorPayload {
 export class RegistryService {
   private provider: ethers.JsonRpcProvider;
   private wallet: ethers.Wallet;
+  private signer: ethers.Signer;
   private contract: ethers.Contract;
 
   constructor() {
@@ -18,6 +19,11 @@ export class RegistryService {
     const signer = ethers.Wallet.createRandom();
     this.wallet = signer.connect(this.provider);
     this.contract = new ethers.Contract(config.web3RegistryAddress, registryAbi, this.wallet);
+    const signer = config.web3SignerKey
+      ? new ethers.Wallet(config.web3SignerKey, this.provider)
+      : ethers.Wallet.createRandom().connect(this.provider);
+    this.signer = signer;
+    this.contract = new ethers.Contract(config.web3RegistryAddress, registryAbi, this.signer);
   }
 
   async anchor(payload: AnchorPayload) {

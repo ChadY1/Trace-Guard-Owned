@@ -6,6 +6,9 @@ export const config = {
   port: parseInt(process.env.PORT || '3000', 10),
   jwtSecret: process.env.JWT_SECRET || 'change-me',
   postgresUrl: process.env.POSTGRES_URL || 'postgres://traceguard:traceguard@localhost:5432/traceguard',
+  postgresPoolSize: parseInt(process.env.POSTGRES_POOL_SIZE || '10', 10),
+  postgresIdleTimeoutMs: parseInt(process.env.POSTGRES_IDLE_TIMEOUT_MS || '30000', 10),
+  postgresConnectionTimeoutMs: parseInt(process.env.POSTGRES_CONNECTION_TIMEOUT_MS || '5000', 10),
   allowOrigins: (process.env.ALLOW_ORIGINS || '').split(',').map((v) => v.trim()).filter(Boolean),
   minioEndpoint: process.env.MINIO_ENDPOINT || 'http://localhost:9000',
   minioAccessKey: process.env.MINIO_ACCESS_KEY || 'traceguard',
@@ -13,4 +16,7 @@ export const config = {
   minioBucket: process.env.MINIO_BUCKET || 'traceguard-media',
   web3RpcUrl: process.env.WEB3_RPC_URL || 'http://localhost:8545',
   web3RegistryAddress: process.env.WEB3_REGISTRY_ADDRESS || ethers.ZeroAddress,
+  web3SignerKey: process.env.WEB3_SIGNER_KEY,
+  responseCacheTtlSeconds: parseInt(process.env.RESPONSE_CACHE_TTL_SECONDS || '120', 10),
+  responseCacheMax: parseInt(process.env.RESPONSE_CACHE_MAX || '500', 10),
 };

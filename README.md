@@ -8,7 +8,8 @@ Cadre initial pour documenter et concevoir TraceGuard (traceguard.globaleurope.f
 - **docs/PROJECT_STRUCTURE.md** : arborescence synthétique et rôle des dossiers.
 - **infra/** : compose Traefik + API + Postgres + MinIO avec headers de sécurité et rate limiting.
 - **backend/** : API Fastify (auth, upload média, audit, policies), JWT protégé, Swagger.
-- **frontend/** : Vite + React, premiers écrans de console sécurisée.
+- **backend/modules/intel/** : vues IMINT/OSINT/géopolitique simulées pour prototyper l’analytique légale.
+- **frontend/** : Vite + React, premiers écrans de console sécurisée. Voir `frontend/README.md` pour le branchement API local.
 - **web3/** : contrat de registre immuable pour ancrer les empreintes de médias.
 - **.github/workflows/ci.yml** : pipeline CI de build/lint backend/frontend.
 

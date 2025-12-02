@@ -13,13 +13,14 @@
   - Consultation contrôlée (RBAC/ABAC), journaux d’accès signés, partage restreint.
   - Chaîne de garde complète, archivage légal, purge et rétention différenciées.
   - Intégration SI (APIs internes/externes, connecteurs analytiques, export probatoire).
-- **Données gérées** : médias bruts, transcodés, métadonnées (horodatage, géoloc, capteur), annotations, journaux d’audit, politiques de gouvernance.
+- **Données gérées** : médias bruts, transcodés, métadonnées (horodatage, géoloc, capteur), annotations, journaux d’audit, politiques de gouvernance, signaux IMINT/OSINT/GEO et résumés analytiques associés.
 
 ## 3. Architecture globale de la plateforme
 - **Vue logique (services)** :
   - Ingestion multimédia (upload, normalisation, détection de corruption, chiffrement côté client ou edge).
   - Orchestrateur de traitement (transcodage, fingerprinting perceptuel, extraction de métadonnées, hashage immuable, signature).
   - Indexation & recherche (métadonnées, timeline, géolocalisation, similarité).
+  - Analyse renseignement : IMINT (sources autorisées), OSINT (sources ouvertes légales), signaux géopolitiques corrélés.
   - Gouvernance d’accès (RBAC/ABAC, règles métiers, délégation, scopes temporels).
   - API Gateway + BFF (front web, mobiles, intégrations partenaires).
   - Web3/décentralisation optionnelle : registres d’empreintes, journalisation immuable, clés et preuves d’intégrité.
@@ -59,6 +60,7 @@
 - **Stockage** :
   - Objets chiffrés (S3/Blob) avec KMS, clés par locataire/projet.
   - Base relationnelle pour référentiels/transactions (PostgreSQL), moteur de recherche (OpenSearch/Elastic) pour métadonnées, time-series pour observabilité.
+  - Bases chiffrées et cloisonnées pour signaux IMINT/OSINT/GEO, index plein texte + recherche géo ; stockage séparé des empreintes (hash) et des contenus, journalisation immuable des accès.
   - Web3/IPFS optionnel pour empreintes/ancrages ; off-chain chiffré pour données sensibles.
 - **Politiques de rétention** : durées par classification, gel légal, purge sécurisée (crypto-shredding), archivage WORM selon besoin probatoire.
 - **Chaîne de garde** : signatures, scellés, logs horodatés, ancrage sur registre immuable, preuves vérifiables.
