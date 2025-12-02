@@ -9,6 +9,7 @@ Arborescence synthétique des principaux dossiers et fichiers fournis pour lance
 │   │   ├── app.ts           # Construction de l'app Fastify (plugins, Swagger, routes)
 │   │   ├── index.ts         # Entrée principale + migration de schéma Postgres
 │   │   ├── db/              # Client Postgres + migration minimale
+│   │   ├── modules/         # Auth, médias, audit, accès
 │   │   ├── modules/         # Auth, médias, audit, accès, renseignement (IMINT/OSINT/GEO)
 │   │   ├── services/        # Stockage objet (MinIO), Web3 registry
 │   │   ├── utils/           # Fonctions utilitaires (checksum)
@@ -25,4 +26,5 @@ Arborescence synthétique des principaux dossiers et fichiers fournis pour lance
 └── .github/workflows/ci.yml # Pipeline CI (build/lint backend et frontend)
 ```
 
+Pour les détails de conception et les étapes d'exécution, consulter `docs/architecture.md` et `docs/DEVELOPMENT.md`.
 Pour les détails de conception, consulter `docs/architecture.md`; pour l'exécution locale et multi-OS, voir `docs/DEVELOPMENT.md` et `docs/INSTALLATION.md`.

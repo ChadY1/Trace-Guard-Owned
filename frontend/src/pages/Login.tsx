@@ -28,6 +28,7 @@ export const Login: React.FC = () => {
   };
 
   return (
+    <main className="layout">
     <div className="page-grid">
       <SecureBanner />
       <section className="panel">
@@ -45,6 +46,7 @@ export const Login: React.FC = () => {
         </form>
         {message && <p className="status">{message}</p>}
       </section>
+    </main>
     </div>
   );
 };

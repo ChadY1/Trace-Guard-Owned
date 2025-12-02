@@ -50,6 +50,10 @@ npm run dev
 - Manifests d'exemple sous `infra/k8s/` (Ingress Traefik, StatefulSet Postgres, Deployment API).
 - Créez les secrets requis (JWT, Postgres, MinIO) avant d'appliquer.
 
+## Déploiement Kubernetes (aperçu)
+- Manifests d'exemple sous `infra/k8s/` (Ingress Traefik, StatefulSet Postgres, Deployment API).
+- Créez les secrets requis (JWT, Postgres, MinIO) avant d'appliquer.
+
 ## Sécurité & conformité
 - Secrets dans un vault (non commités) ; `.env.example` documente les variables attendues.
 - Reverse proxy Traefik applique headers, TLS et rate limiting ; à compléter avec WAF et mTLS interne.

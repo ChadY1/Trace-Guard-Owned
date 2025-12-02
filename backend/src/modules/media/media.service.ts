@@ -67,6 +67,7 @@ export class MediaService {
       'SELECT id, filename, size, mime_type AS "mimeType", checksum, storage_uri AS "storageUri" FROM media_records WHERE id=$1',
       [id]
     );
+    return rows[0] || null;
     const record: MediaRecord | null = rows[0] || null;
     if (record) {
       await cache.set(cacheKey, record, config.responseCacheTtlSeconds);

@@ -6,6 +6,7 @@ export const Upload: React.FC = () => {
   const [status, setStatus] = useState<string>('');
 
   return (
+    <main className="layout">
     <div className="page-grid">
       <SecureBanner />
       <section className="panel">
@@ -14,6 +15,7 @@ export const Upload: React.FC = () => {
         <UploadForm onStatus={setStatus} />
         {status && <p className="status">{status}</p>}
       </section>
+    </main>
     </div>
   );
 };

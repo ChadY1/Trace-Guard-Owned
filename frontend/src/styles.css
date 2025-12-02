@@ -10,6 +10,30 @@ body {
   padding: 0;
 }
 
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: #0b1220;
+  border-bottom: 1px solid #1f2937;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar nav a {
+  color: #cbd5e1;
+  margin-left: 1rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.topbar nav a:hover {
+  color: #38bdf8;
+}
+
+.layout {
 .app-shell {
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -179,6 +203,9 @@ body {
   text-align: left;
 }
 
+.logo {
+  font-weight: 800;
+  color: #38bdf8;
 .badge {
   background: rgba(56, 189, 248, 0.12);
   color: #38bdf8;
